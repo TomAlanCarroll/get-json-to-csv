@@ -7,8 +7,18 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 import java.net.URLEncoder;
 
+/**
+ * A simple REST API client
+ */
 public class RestApiClient {
+    /**
+     * The base URL to execute HTTP requests against
+     */
     private String baseUrl;
+
+    /**
+     * (optional): The parameter ID to provide for HTTP GET requests
+     */
     private String parameterId;
 
     public RestApiClient(String baseUrl) {
@@ -20,8 +30,14 @@ public class RestApiClient {
         this.parameterId = parameterId;
     }
 
-    private RestApiClient () {}
+    private RestApiClient () {} // Make the default constructor unavailable
 
+    /**
+     * Gets the {@code JsonNode} for a HTTP GET request at the given base URL
+     * @param queryString The query String (which will be encoded)
+     * @return The {@code JsonNode} for a HTTP GET request at the given base URL
+     * @throws UnirestException If there are any problems while executing the HTTP GET request
+     */
     public JsonNode getJson(String queryString) throws UnirestException {
         String builtGetUrl = buildGetUrl(queryString);
 
@@ -30,6 +46,12 @@ public class RestApiClient {
         return jsonResponse.getBody();
     }
 
+    /**
+     * Builds a GET URL String
+     * @param queryString The query string to be encoded and added to the URL
+     * @return The baseUrl + the queryString separated either with "/" or "?parameterId=" depending on whether
+     * parameterId has been set
+     */
     protected String buildGetUrl(String queryString) {
         try {
             if (parameterId == null || parameterId.equals("")) {
